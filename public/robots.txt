@@ -1,4 +1,4 @@
-# robots.txt for gvarga091.com
+# robots.txt for kordix.hu
 
 User-agent: *
 Allow: /
