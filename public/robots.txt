@@ -1,0 +1,14 @@
+# robots.txt for gvarga091.com
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://kordix.hu/sitemap.xml
+
+# Crawl-delay (optional, prevent aggressive crawling)
+Crawl-delay: 1
+
+# Disallow specific paths if needed
+# Disallow: /admin/
+# Disallow: /private/
