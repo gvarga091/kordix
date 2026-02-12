@@ -36,6 +36,18 @@ export function Bio() {
             <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
               <p>{bioText.text1}</p>
               <p>{bioText.text2}</p>
+              
+              <div className="pt-6">
+                <a 
+                  href="https://gvarga091.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 font-bold transition-colors group"
+                >
+                  <span>{useLanguage().language === 'hu' ? 'Részletes szakmai portfólió megtekintése' : 'View detailed professional portfolio'}</span>
+                  <div className="w-8 h-[2px] bg-orange-500 group-hover:w-12 transition-all" />
+                </a>
+              </div>
             </div>
           </motion.div>
 

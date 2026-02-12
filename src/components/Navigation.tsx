@@ -1,5 +1,6 @@
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
 
@@ -10,13 +11,25 @@ interface NavigationProps {
 export function Navigation({ activeSection }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const handleNavClick = (id: string) => {
+    if (id === 'projects') {
+      navigate('/projects');
       setMobileMenuOpen(false);
+      return;
     }
+
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: id } });
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setMobileMenuOpen(false);
   };
 
   const navItems = [
@@ -28,32 +41,30 @@ export function Navigation({ activeSection }: NavigationProps) {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-[#303437] backdrop-blur-sm z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md z-50 border-b border-gray-800/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div
-            onClick={() => scrollToSection('home')}
-            className="cursor-pointer"
-            style={{ paddingTop: '16px' }}
+          <Link
+            to="/"
+            className="cursor-pointer flex items-center"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <img 
               src="/kordix-logo.webp" 
               alt="KordiX Logo" 
-              width="200" 
-              height="100"
-              style={{ width: 'auto', height: '100px' }} 
+              className="w-32 md:w-48 lg:w-56 h-auto transition-transform hover:scale-105"
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-sm tracking-wider transition-colors ${
-                  activeSection === item.id
+                onClick={() => handleNavClick(item.id)}
+                className={`text-[13px] uppercase tracking-widest transition-colors font-semibold ${
+                  (activeSection === item.id || (location.pathname === '/projects' && item.id === 'projects'))
                     ? 'text-orange-500'
                     : 'text-gray-400 hover:text-white'
                 }`}
@@ -62,23 +73,16 @@ export function Navigation({ activeSection }: NavigationProps) {
               </button>
             ))}
             
-            {/* Language Toggle */}
-            <LanguageToggle />
+            <div className="h-6 w-[1px] bg-gray-700 mx-2" />
             
-            <button 
-              className="w-10 h-10 rounded-full border-2 border-blue-500 flex items-center justify-center text-blue-500 hover:bg-blue-500 hover:text-white transition-all"
-              aria-label="Felhasználói profil"
-            >
-              <User size={20} />
-            </button>
+            <LanguageToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-gray-400"
+            className="md:hidden text-gray-300 hover:text-white"
             aria-label={mobileMenuOpen ? 'Menü bezárása' : 'Menü megnyitása'}
-            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -86,15 +90,15 @@ export function Navigation({ activeSection }: NavigationProps) {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-800">
+          <div className="md:hidden py-4 bg-black/95 backdrop-blur-md border-t border-gray-800 absolute top-20 left-0 right-0 px-6 shadow-2xl">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-4 py-3 text-sm tracking-wider transition-colors ${
-                  activeSection === item.id
-                    ? 'text-orange-500 bg-gray-900'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-900'
+                onClick={() => handleNavClick(item.id)}
+                className={`block w-full text-left py-4 text-sm tracking-wider transition-colors border-b border-gray-800 last:border-0 ${
+                  (activeSection === item.id || (location.pathname === '/projects' && item.id === 'projects'))
+                    ? 'text-orange-500'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {item.label}
@@ -102,7 +106,8 @@ export function Navigation({ activeSection }: NavigationProps) {
             ))}
             
             {/* Mobile Language Toggle */}
-            <div className="px-4 py-3">
+            <div className="py-4 flex justify-between items-center">
+              <span className="text-gray-400 text-xs tracking-widest uppercase">Nyelv</span>
               <LanguageToggle />
             </div>
           </div>

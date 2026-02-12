@@ -12,7 +12,7 @@ export function Contrast() {
   };
 
   return (
-    <section id="contrast" className="py-24 bg-black text-white">
+    <section id="contrast" className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -38,7 +38,7 @@ export function Contrast() {
               <h3 className="text-2xl font-bold text-red-500 mb-4">{contrastText.problem.title}</h3>
               <p className="text-gray-400 mb-6">{contrastText.problem.text}</p>
             </div>
-            <div className="w-full h-48 bg-gray-800 rounded-md overflow-hidden filter blur-sm opacity-70">
+            <div className="w-full h-48 bg-gray-800 rounded-md overflow-hidden">
               <img 
                 src="/placeholder-messy-excel.webp" 
                 alt="Kaotikus Excel táblázat - elveszett információk, nehezen kezelhető adatok" 

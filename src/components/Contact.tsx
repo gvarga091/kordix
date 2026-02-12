@@ -61,7 +61,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-32 bg-[#0a0a0f] text-white">
-      <div className="max-w-3xl mx-auto px-6 text-center">
+      <div className="max-w-4xl mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -156,35 +156,35 @@ export function Contact() {
           </AnimatePresence>
 
           {/* Direct Contact Methods */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 text-gray-400 max-w-4xl mx-auto">
-            <a 
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 text-gray-400">
+            <a
               href="mailto:gergo@kordix.hu"
-              className="flex items-center justify-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
             >
               <Mail size={20} className="flex-shrink-0" />
-              <span className="truncate">gergo@kordix.hu</span>
+              <span>gergo@kordix.hu</span>
             </a>
-            <a 
+            <a
               href="tel:+36705668606"
-              className="flex items-center justify-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
             >
               <Phone size={20} className="flex-shrink-0" />
               <span>+36 70 566 8606</span>
             </a>
-            <a 
+            <a
               href="https://www.linkedin.com/in/gvarga091"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
             >
               <Linkedin size={20} className="flex-shrink-0" />
               <span>LinkedIn</span>
             </a>
-            <a 
+            <a
               href="https://www.facebook.com/kordix.hu"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
+              className="flex items-center gap-2 hover:text-blue-400 transition-colors text-sm md:text-base"
             >
               <Facebook size={20} className="flex-shrink-0" />
               <span>Facebook</span>

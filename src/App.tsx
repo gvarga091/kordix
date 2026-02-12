@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -8,15 +9,30 @@ import { Contrast } from './components/Contrast';
 import { Bio } from './components/Bio';
 import { Hardware } from './components/Hardware';
 import { Contact } from './components/Contact';
+import { Legal } from './components/Legal';
 import { Toaster } from 'sonner';
 
-function AppContent() {
-  const { t } = useLanguage();
+function Home() {
   const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && (location.state as any).scrollTo) {
+      const sectionId = (location.state as any).scrollTo;
+      const element = document.getElementById(sectionId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+      // Tisztítsuk meg a state-et, hogy ne görögjön újra frissítéskor
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'contrast', 'about', 'projects', 'hardware', 'bio', 'contact'];
+      const sections = ['home', 'contrast', 'about', 'hardware', 'bio', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -36,7 +52,7 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
+    <>
       <Navigation activeSection={activeSection} />
       <Hero />
       <Contrast />
@@ -45,11 +61,98 @@ function AppContent() {
       <Hardware />
       <Bio />
       <Contact />
+    </>
+  );
+}
+
+function ProjectsPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <>
+      <Navigation activeSection="projects" />
+      <div className="pt-20">
+        <Projects />
+      </div>
+      <Contact />
+    </>
+  );
+}
+
+function AppRoutes() {
+  const { t } = useLanguage();
+
+  return (
+    <div className="min-h-screen bg-black">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/legal" element={<Legal />} />
+      </Routes>
       
       {/* Footer */}
-      <footer className="bg-black border-t border-gray-800 text-gray-300 py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p>{t.footer.copyright}</p>
+      <footer className="bg-[#060609] border-t border-gray-800 text-gray-400">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            {/* Brand */}
+            <div>
+              <span className="text-white text-xl font-bold tracking-wide">
+                Kordi<span className="text-[#029CDF]">X</span>
+              </span>
+              <p className="text-sm text-gray-500 mt-3 leading-relaxed">
+                {useLanguage().language === 'hu'
+                  ? 'Egyedi szoftverfejlesztés, felhő infrastruktúra és mérnöki megoldások.'
+                  : 'Custom software development, cloud infrastructure, and engineering solutions.'}
+              </p>
+            </div>
+
+            {/* Links */}
+            <div>
+              <h4 className="text-xs uppercase tracking-widest font-bold text-gray-300 mb-4">
+                {useLanguage().language === 'hu' ? 'Linkek' : 'Links'}
+              </h4>
+              <div className="flex flex-col gap-2 text-sm">
+                <Link to="/legal" className="hover:text-white transition-colors w-fit">
+                  {useLanguage().language === 'hu' ? 'Impresszum' : 'Legal Notice'}
+                </Link>
+                <a href="mailto:gergo@kordix.hu" className="hover:text-white transition-colors w-fit">
+                  Support
+                </a>
+              </div>
+            </div>
+
+            {/* Partners */}
+            <div>
+              <h4 className="text-xs uppercase tracking-widest font-bold text-gray-300 mb-4">
+                {useLanguage().language === 'hu' ? 'Partnerek' : 'Partners'}
+              </h4>
+              <div className="flex items-center gap-6">
+                <a href="https://www.forpsi.hu" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="/Forpsi_bianco_blu_atlatszo_hatter.png"
+                    alt="Forpsi"
+                    className="h-8 w-auto opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all"
+                  />
+                </a>
+                <div className="w-px h-6 bg-gray-700" />
+                <a
+                  href="https://www.arubacloud.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white font-black italic text-sm uppercase opacity-50 hover:opacity-100 transition-all"
+                >
+                  Aruba Cloud
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-gray-500">{t.footer.copyright}</p>
+          </div>
         </div>
       </footer>
     </div>
@@ -59,7 +162,9 @@ function AppContent() {
 export default function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <Router>
+        <AppRoutes />
+      </Router>
       <Toaster position="top-right" />
     </LanguageProvider>
   );

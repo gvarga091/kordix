@@ -1,16 +1,11 @@
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export function Hero() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image */}
@@ -48,8 +43,8 @@ export function Hero() {
           </p>
           
           <button
-            onClick={() => scrollToSection('projects')}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full transition-all shadow-lg shadow-blue-500/50 transform hover:scale-105"
+            onClick={() => navigate('/projects')}
+            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white rounded-full transition-all shadow-lg shadow-blue-500/50 transform hover:scale-105 font-medium"
           >
             {t.hero.viewWork}
           </button>

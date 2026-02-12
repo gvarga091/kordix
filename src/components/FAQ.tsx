@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 interface FAQItem {
@@ -56,42 +57,77 @@ const faqData: Record<'hu' | 'en', FAQItem[]> = {
 
 export default function FAQ() {
   const { language } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const faqs = faqData[language];
 
   return (
     <div className="mt-8 pt-8 border-t border-zinc-800">
-      <h3 className="text-lg font-medium text-zinc-300 mb-4">
-        {language === 'hu' ? 'Gyakori kérdések' : 'Frequently Asked Questions'}
-      </h3>
-      <div className="space-y-3">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-900/30"
+      <button
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (isOpen) setOpenIndex(null);
+        }}
+        className="w-full flex items-center justify-between py-2 group"
+      >
+        <h3 className="text-lg font-medium text-zinc-300 group-hover:text-white transition-colors">
+          {language === 'hu' ? 'Gyakori kérdések' : 'Frequently Asked Questions'}
+        </h3>
+        <ChevronDown
+          className={`w-5 h-5 text-zinc-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
           >
-            <button
-              onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-zinc-900/50 transition-colors"
-            >
-              <span className="text-sm font-medium text-zinc-200">
-                {faq.question}
-              </span>
-              <ChevronDown
-                className={`w-4 h-4 text-zinc-400 transition-transform ${
-                  openIndex === index ? 'transform rotate-180' : ''
-                }`}
-              />
-            </button>
-            {openIndex === index && (
-              <div className="px-4 pb-3 text-sm text-zinc-400 leading-relaxed">
-                {faq.answer}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+            <div className="space-y-3 pt-4">
+              {faqs.map((faq, index) => (
+                <div
+                  key={index}
+                  className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-900/30"
+                >
+                  <button
+                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                    className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-zinc-900/50 transition-colors"
+                  >
+                    <span className="text-sm font-medium text-zinc-200">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-zinc-400 flex-shrink-0 ml-2 transition-transform ${
+                        openIndex === index ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-3 text-sm text-zinc-400 leading-relaxed">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
