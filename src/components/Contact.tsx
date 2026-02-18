@@ -44,6 +44,12 @@ export function Contact() {
         toast.success('Üzenet elküldve! Hamarosan jelentkezem.');
         setFormData({ name: '', email: '', message: '' });
         setIsFormOpen(false);
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'lead', { event_category: 'contact_form' });
+        }
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'Lead');
+        }
       } else {
         toast.error('Hiba történt. Kérlek próbáld újra!');
       }
