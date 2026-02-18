@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -57,7 +58,7 @@ function Home() {
       <Hero />
       <Contrast />
       <About />
-      <Projects />
+      <Projects limit={3} />
       <Hardware />
       <Bio />
       <Contact />
@@ -66,6 +67,8 @@ function Home() {
 }
 
 function ProjectsPage() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -74,6 +77,15 @@ function ProjectsPage() {
     <>
       <Navigation activeSection="projects" />
       <div className="pt-20">
+        <div className="max-w-7xl mx-auto px-6 pt-8">
+          <button
+            onClick={() => navigate('/', { state: { scrollTo: 'projects' } })}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4 group"
+          >
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm">Vissza</span>
+          </button>
+        </div>
         <Projects />
       </div>
       <Contact />

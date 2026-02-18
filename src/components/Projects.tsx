@@ -4,59 +4,78 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-export function Projects() {
+interface ProjectsProps {
+  limit?: number;
+}
+
+export function Projects({ limit }: ProjectsProps) {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
-  
+
   const projects_en = [
     {
-      title: 'The service company that ditched paper',
-      description: "Disappearing work orders and slow invoicing solved with a fully digital workflow. The technician receives tasks on a tablet and closes them with a single tap.",
-      tech: ['Django', 'PWA'],
+      title: 'Field Service Management – Pro',
+      description: 'Full-featured service management platform: ticket tracking, technician scheduling, KPI dashboards, digital signatures, and automated invoicing workflow.',
+      tech: ['Django', 'PWA', 'PostgreSQL'],
       role: '',
-      image: '/placeholder-video-1.gif'
+      image: '/projects/service-app-pro.webp'
     },
     {
-      title: 'Warehouse inventory without guesswork',
-      description: 'Eliminating stock-level uncertainty with a barcode system, real-time monitoring, and automatic low-stock alerts.',
-      tech: ['Python', 'PostgreSQL'],
+      title: 'Multi-Stop Route Optimizer',
+      description: 'Web-based tool that calculates the optimal route for field teams across hundreds of stops. Supports multiple depots, time windows, and exports to Excel/PDF.',
+      tech: ['Python', 'OSRM', 'Leaflet'],
       role: '',
-      image: '/placeholder-video-2.gif'
+      image: '/projects/routeoptim.webp'
     },
     {
-      title: 'Custom Access Control',
-      description: 'Bespoke enclosure design and 3D printing integrated with custom software for a compromise-free, waterproof hardware solution.',
-      tech: ['3D Printing', 'IoT'],
+      title: 'Custom Access Control System',
+      description: 'Bespoke enclosure design, 3D printing, and custom RFID software — fully integrated from hardware to web dashboard. Waterproof, tailored installation.',
+      tech: ['3D Printing', 'IoT', 'Django'],
       role: 'Hardware & Software Symbiosis',
-      image: '/placeholder-image-3.webp'
+      image: '/projects/belepteto.webp'
+    },
+    {
+      title: 'Warehouse & Work Order App – Lite',
+      description: 'Inventory management, barcode generation, drag-and-drop scheduling, POS-style quick sale, and printable work order PDFs — all in one lightweight app.',
+      tech: ['Django', 'Python', 'PostgreSQL'],
+      role: '',
+      image: '/projects/service-app-lite.webp'
     }
   ];
 
   const projects_hu = [
     {
-      title: 'Digitális munkalap szervizcégeknek',
-      description: 'Eltűnő munkalapok és lassú számlázás helyett: a technikus tableten kapja a feladatot, egy gombnyomással lezárja, az iroda pedig valós időben számláz.',
-      tech: ['Django', 'PWA'],
+      title: 'Szerviz menedzsment rendszer – Pro',
+      description: 'Teljes körű szerviz platform: hibajegy-kezelés, technikus beosztás, KPI dashboard, digitális aláírás, és automatizált számlázási munkafolyamat.',
+      tech: ['Django', 'PWA', 'PostgreSQL'],
       role: '',
-      image: '/placeholder-video-1.gif'
+      image: '/projects/service-app-pro.webp'
     },
     {
-      title: 'Raktárkészlet-kezelés tippek nélkül',
-      description: 'A "szerintem még van" alapú működés vége. Vonalkódos rendszer, valós idejű készletfigyelés és automatikus utánrendelési figyelmeztetés.',
-      tech: ['Python', 'PostgreSQL'],
+      title: 'Többállomásos útvonal-optimalizáló',
+      description: 'Webes eszköz, amely kiszámítja a terepen dolgozó csapatok optimális útvonalát akár száz megálló esetén is. Több telephelyet, időablakokat kezel, Excel/PDF export.',
+      tech: ['Python', 'OSRM', 'Leaflet'],
       role: '',
-      image: '/placeholder-video-2.gif'
+      image: '/projects/routeoptim.webp'
     },
     {
-      title: 'Egyedi Beléptetés Vezérlés',
-      description: 'Speciális burkolattervezés, 3D nyomtatás és saját szoftver integráció. Kompromisszummentes, vízálló hardver megoldás egyedi igényekre.',
-      tech: ['3D Nyomtatás', 'IoT'],
+      title: 'Egyedi beléptető vezérlés',
+      description: 'Egyedi burkolattervezés, 3D nyomtatás és saját RFID szoftver – teljes integráció hardvertől a webes vezérlőpanelig. Vízálló, testre szabott telepítés.',
+      tech: ['3D Nyomtatás', 'IoT', 'Django'],
       role: 'Hardver és Szoftver szimbiózisa',
-      image: '/placeholder-image-3.webp'
+      image: '/projects/belepteto.webp'
+    },
+    {
+      title: 'Raktár és munkalap app – Lite',
+      description: 'Készletkezelés, vonalkód-generálás, drag-and-drop ütemezés, POS-szerű gyors eladás és nyomtatható munkalap PDF – egy könnyű alkalmazásban.',
+      tech: ['Django', 'Python', 'PostgreSQL'],
+      role: '',
+      image: '/projects/service-app-lite.webp'
     }
   ];
 
-  const projects = language === 'en' ? projects_en : projects_hu;
+  const allProjects = language === 'en' ? projects_en : projects_hu;
+  const projects = limit ? allProjects.slice(0, limit) : allProjects;
 
   return (
     <section id="projects" className="py-20 bg-[#0a0a0f]">
@@ -75,21 +94,23 @@ export function Projects() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {projects.map((project, index) => (
               <ProjectCard key={index} project={project} index={index} />
             ))}
           </div>
 
-          <div className="flex justify-center pb-8">
-            <button
-              onClick={() => navigate('/projects')}
-              className="flex items-center gap-2 px-8 py-4 border border-gray-800 rounded-full text-white hover:bg-gray-900 hover:border-blue-500/50 transition-all group"
-            >
-              <span>{language === 'en' ? 'View all solutions' : 'Összes megoldás megtekintése'}</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+          {limit && (
+            <div className="flex justify-center pb-8">
+              <button
+                onClick={() => navigate('/projects')}
+                className="flex items-center gap-2 px-8 py-4 border border-gray-800 rounded-full text-white hover:bg-gray-900 hover:border-blue-500/50 transition-all group"
+              >
+                <span>{language === 'en' ? 'View all solutions' : 'Összes megoldás megtekintése'}</span>
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>
